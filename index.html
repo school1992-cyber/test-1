@@ -3,335 +3,488 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Institution Portal</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
+    <title>Home | School Management Portal</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#4f46e5">
     <style>
-        :root {
-            --bg-color: #f9fafb;
-            --surface: #ffffff;
-            --text-main: #1f2937;
-            --text-dim: #6b7280;
-            --accent: #2563eb;
-            --accent-hover: #1d4ed8;
-            --border: #e5e7eb;
-            --ease: cubic-bezier(0.25, 1, 0.5, 1);
+        * {
+            font-family: 'Inter', sans-serif;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Inter', sans-serif; background: var(--bg-color); color: var(--text-main); display: flex; flex-direction: column; min-height: 100vh; }
-
-        /* --- Navigation --- */
-        nav {
-            position: sticky; top: 0; width: 100%; height: 64px;
-            background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px);
-            z-index: 1000; border-bottom: 1px solid var(--border);
-            padding: 0 5%; display: flex; justify-content: space-between; align-items: center;
+        /* Dark Mode Transitions */
+        html.dark {
+            color-scheme: dark;
         }
-        .logo { font-weight: 600; font-size: 1rem; color: var(--text-main); display: flex; align-items: center; gap: 10px; cursor: pointer; }
-        .logo i { color: var(--accent); }
-
-        .nav-links { display: flex; gap: 0.5rem; list-style: none; height: 100%; align-items: center; }
-        .nav-item { position: relative; height: 100%; display: flex; align-items: center; }
         
-        .nav-link, .drop-btn { 
-            text-decoration: none; color: var(--text-dim); font-size: 0.85rem; font-weight: 500;
-            padding: 8px 16px; border-radius: 6px; transition: 0.2s; cursor: pointer;
+        body {
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
-        .nav-link:hover, .drop-btn:hover { background: #f3f4f6; color: var(--text-main); }
-        .nav-link.active { color: var(--accent); background: #eff6ff; }
 
-        /* Dropdown */
-        .dropdown-menu {
-            display: none; position: absolute; top: 60px; right: 0;
-            background: var(--surface); min-width: 220px; border-radius: 8px;
-            border: 1px solid var(--border); padding: 8px;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-            animation: slideDown 0.2s var(--ease);
+        /* Smooth scroll */
+        html {
+            scroll-behavior: smooth;
         }
-        @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
-        .dropdown-menu a {
-            padding: 10px 12px; text-decoration: none; color: var(--text-dim);
-            display: block; font-size: 0.85rem; border-radius: 6px; transition: 0.15s;
-        }
-        .dropdown-menu a:hover { background: #f9fafb; color: var(--accent); }
-        .nav-item:hover .dropdown-menu { display: block; }
 
-        /* --- Main Content --- */
-        main { flex: 1; padding: 3rem 5%; width: 100%; max-width: 1200px; margin: 0 auto; }
-        
-        .hero-header { text-align: center; margin-bottom: 3rem; }
-        .hero-header h1 { font-size: 1.8rem; font-weight: 600; color: var(--text-main); margin-bottom: 0.5rem; }
-        .badge { font-size: 0.75rem; background: #dbeafe; color: #1e40af; padding: 4px 12px; border-radius: 99px; font-weight: 500; display: inline-block; margin-bottom: 1rem; }
-
-        /* --- Professional Tables --- */
-        .table-wrapper { 
-            background: var(--surface); border: 1px solid var(--border); 
-            border-radius: 12px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.05); 
+        /* Fade in animation */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
-        .table-scroll { overflow-x: auto; max-height: 70vh; }
-        table { width: 100%; border-collapse: collapse; text-align: left; }
-        
-        /* Sticky Header Logic */
-        th { 
-            background: #f8fafc; color: var(--text-dim); font-size: 0.75rem; 
-            font-weight: 600; text-transform: uppercase; padding: 1rem; letter-spacing: 0.05em;
-            position: sticky; top: 0; z-index: 10; border-bottom: 1px solid var(--border);
-        }
-        td { padding: 1rem; font-size: 0.9rem; border-bottom: 1px solid var(--border); color: var(--text-main); }
-        tr:last-child td { border-bottom: none; }
-        tr:hover td { background: #f9fafb; }
 
-        /* --- Cards --- */
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem; }
-        .card { 
-            background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem;
-            transition: all 0.2s; position: relative; overflow: hidden;
+        @keyframes fadeInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
         }
-        .card:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(0,0,0,0.05); border-color: var(--accent); }
-        .card-label { font-size: 0.7rem; color: var(--text-dim); text-transform: uppercase; margin-bottom: 4px; }
-        .card-value { font-size: 0.95rem; font-weight: 500; margin-bottom: 12px; }
 
-        /* --- Buttons & Links --- */
-        .btn-link { 
-            display: inline-flex; align-items: center; gap: 6px;
-            color: var(--accent); font-size: 0.85rem; font-weight: 500; text-decoration: none;
-            padding: 6px 12px; background: #eff6ff; border-radius: 6px; transition: 0.2s;
+        @keyframes fadeInRight {
+            from {
+                opacity: 0;
+                transform: translateX(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
         }
-        .btn-link:hover { background: var(--accent); color: white; }
 
-        /* --- Footer --- */
-        footer {
-            background: white; border-top: 1px solid var(--border);
-            padding: 2rem 5%; text-align: center; margin-top: auto;
+        @keyframes scaleIn {
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
         }
-        .footer-text { color: var(--text-dim); font-size: 0.85rem; }
-        .footer-links { margin-top: 10px; display: flex; justify-content: center; gap: 20px; font-size: 0.85rem; }
-        .footer-links a { text-decoration: none; color: var(--text-dim); }
-        .footer-links a:hover { color: var(--accent); }
 
-        .loader { display: none; text-align: center; padding: 4rem; color: var(--text-dim); }
-        .fa-spin { margin-right: 8px; }
+        .animate-fade-in {
+            animation: fadeIn 0.8s ease-out forwards;
+        }
+
+        .animate-fade-in-left {
+            animation: fadeInLeft 0.8s ease-out forwards;
+        }
+
+        .animate-fade-in-right {
+            animation: fadeInRight 0.8s ease-out forwards;
+        }
+
+        .animate-scale-in {
+            animation: scaleIn 0.6s ease-out forwards;
+        }
+
+        .delay-100 { animation-delay: 0.1s; }
+        .delay-200 { animation-delay: 0.2s; }
+        .delay-300 { animation-delay: 0.3s; }
+        .delay-400 { animation-delay: 0.4s; }
+        .delay-500 { animation-delay: 0.5s; }
+        .delay-600 { animation-delay: 0.6s; }
+
+        /* Initial state for animations */
+        .animate-on-load {
+            opacity: 0;
+        }
+
+        /* Smooth hover transitions */
+        .hover-lift {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .hover-lift:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Underline animation for nav links */
+        .nav-link {
+            position: relative;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: #4F46E5;
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover::after,
+        .nav-link.active::after {
+            width: 100%;
+        }
+
+        /* Button hover effect */
+        .btn-primary {
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .btn-primary:hover::before {
+            left: 100%;
+        }
+
+        /* Stat counter animation */
+        .stat-number {
+            transition: transform 0.3s ease;
+        }
+
+        .stat-item:hover .stat-number {
+            transform: scale(1.1);
+        }
+
+        /* Scroll indicator */
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(10px); }
+        }
+
+        .scroll-indicator {
+            animation: bounce 2s infinite;
+        }
+
+        /* Hide scrollbar but allow scrolling */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
     </style>
 </head>
-<body>
+<body class="bg-white dark:bg-slate-950 min-h-screen text-gray-800 dark:text-gray-200 transition-colors duration-300">
+    <!-- Announcement Bar -->
+    <div class="bg-indigo-600 dark:bg-indigo-900 text-white py-2 px-6 text-center text-xs font-medium tracking-wide z-[60] relative">
+        <span class="opacity-90">Notice:</span> New Academic Calendar for 2024-25 is now available in the Master section.
+    </div>
 
-    <nav>
-        <div class="logo" onclick="window.location.hash = 'home'">
-            <i class="fa-solid fa-building-columns"></i> INSTITUTION PORTAL
+    <!-- Navigation -->
+    <nav class="fixed top-10 left-0 right-0 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md z-50 transition-all duration-300 border-b border-transparent dark:border-slate-800" id="navbar">
+        <div class="max-w-6xl mx-auto px-6">
+            <div class="flex justify-between items-center py-5">
+                <h1 class="text-xl font-semibold tracking-tight animate-on-load animate-fade-in-left">
+                    <span class="text-indigo-600">School</span> Portal
+                </h1>
+                <div class="flex items-center space-x-6">
+                    <div class="flex items-center space-x-4 md:space-x-8">
+                        <a href="index.html" class="nav-link active text-gray-800 dark:text-white font-medium text-xs md:text-sm tracking-wide whitespace-nowrap animate-on-load animate-fade-in delay-100">Home</a>
+                        
+                        <!-- Documents Dropdown -->
+                        <div class="relative group animate-on-load animate-fade-in delay-200">
+                            <button class="flex items-center space-x-1 nav-link text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-white font-medium text-xs md:text-sm tracking-wide whitespace-nowrap transition-colors duration-300 focus:outline-none">
+                                <span>Documents</span>
+                            </button>
+                            <!-- Dropdown Menu -->
+                            <div class="absolute left-0 mt-2 w-40 md:w-48 bg-white dark:bg-slate-900 rounded-2xl shadow-xl border border-gray-100 dark:border-slate-800 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform origin-top-left -translate-y-2 group-hover:translate-y-0 z-[60]">
+                                <div class="py-2">
+                                    <a href="society.html" class="block px-6 py-3 text-xs md:text-sm text-gray-600 dark:text-gray-400 hover:bg-indigo-50 dark:hover:bg-slate-800 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">Society</a>
+                                    <a href="master.html" class="block px-6 py-3 text-xs md:text-sm text-gray-600 dark:text-gray-400 hover:bg-indigo-50 dark:hover:bg-slate-800 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">Master</a>
+                                    <a href="cbsezone.html" class="block px-6 py-3 text-xs md:text-sm text-gray-600 dark:text-gray-400 hover:bg-indigo-50 dark:hover:bg-slate-800 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">CBSE & Zone</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Members Dropdown -->
+                        <div class="relative group animate-on-load animate-fade-in delay-300">
+                            <button class="flex items-center space-x-1 nav-link text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-white font-medium text-xs md:text-sm tracking-wide whitespace-nowrap transition-colors duration-300 focus:outline-none">
+                                <span>Members</span>
+                            </button>
+                            <!-- Dropdown Menu -->
+                            <div class="absolute right-0 md:left-0 mt-2 w-40 md:w-48 bg-white dark:bg-slate-900 rounded-2xl shadow-xl border border-gray-100 dark:border-slate-800 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform origin-top-right md:origin-top-left -translate-y-2 group-hover:translate-y-0 z-[60]">
+                                <div class="py-2">
+                                    <a href="members.html?tab=Society" class="block px-6 py-3 text-xs md:text-sm text-gray-600 dark:text-gray-400 hover:bg-indigo-50 dark:hover:bg-slate-800 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">Society</a>
+                                    <a href="members.html?tab=SMC" class="block px-6 py-3 text-xs md:text-sm text-gray-600 dark:text-gray-400 hover:bg-indigo-50 dark:hover:bg-slate-800 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">SMC</a>
+                                    <a href="members.html?tab=PTA" class="block px-6 py-3 text-xs md:text-sm text-gray-600 dark:text-gray-400 hover:bg-indigo-50 dark:hover:bg-slate-800 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">PTA (EC)</a>
+                                    <a href="members.html?tab=SLFRC" class="block px-6 py-3 text-xs md:text-sm text-gray-600 dark:text-gray-400 hover:bg-indigo-50 dark:hover:bg-slate-800 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">SLFRC</a>
+                                    <a href="members.html?tab=Staff" class="block px-6 py-3 text-xs md:text-sm text-gray-600 dark:text-gray-400 hover:bg-indigo-50 dark:hover:bg-slate-800 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">Staff</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button onclick="openSearch()" class="p-2 text-gray-400 hover:text-indigo-600 transition-colors animate-on-load animate-fade-in delay-300" title="Search (Cmd+K)">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
         </div>
-        <ul class="nav-links" id="main-nav"></ul>
     </nav>
 
-    <main id="app">
-        <div id="loader" class="loader"><i class="fa-solid fa-circle-notch fa-spin"></i> Loading Records...</div>
-        <div id="content-area"></div>
-    </main>
+    <!-- Global Search Modal -->
+    <div id="searchModal" class="fixed inset-0 z-[100] hidden">
+        <div class="absolute inset-0 bg-slate-900/40 backdrop-blur-sm" onclick="closeSearch()"></div>
+        <div class="relative max-w-2xl mx-auto mt-24 px-4">
+            <div class="bg-white dark:bg-slate-900 rounded-3xl shadow-2xl overflow-hidden border border-gray-100 dark:border-slate-800">
+                <div class="flex items-center p-5 border-b border-gray-50 dark:border-slate-800">
+                    <svg class="w-5 h-5 text-gray-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                    </svg>
+                    <input type="text" id="globalSearchInput" placeholder="Search school portal..." 
+                        class="flex-1 text-lg border-0 focus:ring-0 placeholder:text-gray-400 text-gray-900 dark:text-white bg-transparent"
+                        oninput="handleGlobalSearch(this.value)">
+                </div>
+                <div id="searchResults" class="max-h-[60vh] overflow-y-auto p-4 space-y-2"></div>
+                <div class="p-4 bg-gray-50 dark:bg-slate-800/50 border-t border-gray-100 dark:border-slate-800 flex justify-between items-center text-[10px] text-gray-400 uppercase tracking-widest font-bold">
+                    <span>Navigation: Arrows / Enter</span>
+                    <span>Close: Esc</span>
+                </div>
+            </div>
+        </div>
+    </div>
 
-    <footer>
-        <div class="footer-text">© 2024 Institution Portal. All Rights Reserved.</div>
-        <div class="footer-links">
-            <a href="#">Privacy Policy</a>
-            <a href="#">Help Center</a>
-            <a href="#">Contact Admin</a>
+
+
+    <!-- Hero Section -->
+    <header class="min-h-screen flex items-center justify-center px-6 pt-20">
+        <div class="max-w-4xl mx-auto text-center">
+            <p class="text-indigo-600 font-medium tracking-widest text-xs md:text-sm uppercase mb-6 animate-on-load animate-fade-in delay-200">Welcome to</p>
+            <h2 class="text-4xl md:text-7xl font-light text-gray-900 mb-6 leading-tight animate-on-load animate-fade-in delay-300">
+                School Management<br>
+                <span class="font-semibold">Portal</span>
+            </h2>
+            <p class="text-base md:text-lg text-gray-500 font-light max-w-xl mx-auto mb-12 leading-relaxed animate-on-load animate-fade-in delay-400">
+                Your streamlined solution for educational resources, documentation, and school administration.
+            </p>
+
+            
+            <!-- Scroll indicator -->
+            <div class="absolute bottom-10 left-1/2 -translate-x-1/2 scroll-indicator animate-on-load animate-fade-in delay-600">
+                <svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
+                </svg>
+            </div>
+        </div>
+    </header>
+
+
+
+
+
+    <!-- Footer -->
+    <footer class="py-12 px-6 border-t border-gray-100">
+        <div class="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center">
+            <p class="text-gray-400 text-sm">© 2024 School Management Portal</p>
+            <div class="flex space-x-8 mt-4 md:mt-0">
+                <a href="society.html" class="text-gray-400 hover:text-gray-600 text-sm transition-colors duration-300">Society</a>
+                <a href="master.html" class="text-gray-400 hover:text-gray-600 text-sm transition-colors duration-300">Master</a>
+                <a href="cbsezone.html" class="text-gray-400 hover:text-gray-600 text-sm transition-colors duration-300">CBSE & Zone</a>
+            </div>
         </div>
     </footer>
 
     <script>
-        /**
-         * ⚙️ CONFIGURATION
-         */
-        const SITE_CONFIG = {
-            scriptURL: 'https://script.google.com/macros/s/AKfycbwrcwaM4FhWN6p1kFubippIp8bwVj_g2vQilpQSxo2t4eWPip67bcmqOFyrvwQukvIOyQ/exec',
-            pages: [
-                { id: 'home', title: 'Home', type: 'static', content: `
-                    <div class="hero-header">
-                        <h1>Welcome to the Portal</h1>
-                        <p style="color:var(--text-dim); max-width:600px; margin:0 auto;">
-                            Secure access to institutional documents, society members, and administrative records. 
-                            Select a category above to begin.
-                        </p>
-                        <br>
-                        <div style="display:flex; gap:10px; justify-content:center;">
-                           <div class="card" style="text-align:center; padding:20px; width:150px;">
-                                <i class="fa-regular fa-folder-open" style="font-size:24px; color:var(--accent); margin-bottom:10px;"></i>
-                                <div style="font-size:0.8rem; color:var(--text-dim)">Documents</div>
-                           </div>
-                           <div class="card" style="text-align:center; padding:20px; width:150px;">
-                                <i class="fa-solid fa-users" style="font-size:24px; color:var(--accent); margin-bottom:10px;"></i>
-                                <div style="font-size:0.8rem; color:var(--text-dim)">Members</div>
-                           </div>
-                        </div>
-                    </div>` 
-                },
-                { 
-                    title: 'Documents', 
-                    type: 'dropdown', 
-                    links: [
-                        { id: 'society', title: 'Society Docs', type: 'dynamic', layout: 'card', sheetId: '1wgPQaYPCncNyyJnW-fu_nygIF-ZaoKBM5FQxALI8bF8', gid: '85431680' },
-                        { id: 'master', title: 'Master List', type: 'dynamic', layout: 'table', sheetId: '1wgPQaYPCncNyyJnW-fu_nygIF-ZaoKBM5FQxALI8bF8', gid: '1430286757' },
-                        { id: 'cbse', title: 'CBSE & Zone', type: 'dynamic', layout: 'card', sheetId: '1wgPQaYPCncNyyJnW-fu_nygIF-ZaoKBM5FQxALI8bF8', gid: '885792851' }
-                    ]
-                },
-                {
-                    title: 'Members',
-                    type: 'dropdown',
-                    links: [
-                        { id: 'members', title: 'Society Members', type: 'dynamic', layout: 'table', sheetId: '1wrcR-9KSQl4WeiAzwBvNwDMqR4HNhOIZyZGjociO3iQ', gid: '0' }
-                    ]
-                }
-            ]
+
+
+        // Navbar scroll effect
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                navbar.classList.add('shadow-sm', 'py-3', 'dark:bg-slate-900');
+                navbar.classList.remove('py-5');
+                navbar.style.top = '0';
+            } else {
+                navbar.classList.remove('shadow-sm', 'py-3', 'dark:bg-slate-900');
+                navbar.classList.add('py-5');
+                navbar.style.top = '2.5rem'; // Height of announcement bar
+            }
+        });
+
+        // Intersection Observer for scroll animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
         };
 
-        const appArea = document.getElementById('content-area');
-        const navBar = document.getElementById('main-nav');
-        const loader = document.getElementById('loader');
-
-        function init() {
-            renderNav();
-            window.addEventListener('hashchange', router);
-            router();
-        }
-
-        function renderNav() {
-            navBar.innerHTML = SITE_CONFIG.pages.map(item => {
-                if (item.type === 'dropdown') {
-                    return `
-                        <li class="nav-item">
-                            <span class="drop-btn">${item.title} <i class="fa-solid fa-chevron-down" style="font-size:10px; margin-left:4px;"></i></span>
-                            <div class="dropdown-menu">
-                                ${item.links.map(link => `<a href="#${link.id}">${link.title}</a>`).join('')}
-                            </div>
-                        </li>`;
-                }
-                return `<li class="nav-item"><a class="nav-link" href="#${item.id}" data-page="${item.id}">${item.title}</a></li>`;
-            }).join('');
-        }
-
-        async function router() {
-            const hash = window.location.hash.replace('#', '') || 'home';
-            let page = null;
-            SITE_CONFIG.pages.forEach(p => {
-                if (p.id === hash) page = p;
-                if (p.type === 'dropdown') {
-                    const sub = p.links.find(l => l.id === hash);
-                    if (sub) page = sub;
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animate-fade-in');
+                    observer.unobserve(entry.target);
                 }
             });
+        }, observerOptions);
 
-            appArea.innerHTML = '';
-            document.querySelectorAll('.nav-link').forEach(a => a.classList.toggle('active', a.dataset.page === hash));
-            
-            if (!page) return;
-            page.type === 'static' ? renderContent(page.content) : fetchAndRenderData(page);
-        }
+        // Observe elements for scroll animation
+        document.querySelectorAll('#features .hover-lift, .stat-item').forEach(el => {
+            el.style.opacity = '0';
+            observer.observe(el);
+        });
 
-        async function fetchAndRenderData(page) {
-            loader.style.display = 'block';
-            const contentDiv = document.getElementById('content-area');
-            
+        // Trigger load animations
+        window.addEventListener('load', () => {
+            document.querySelectorAll('.animate-on-load').forEach(el => {
+                el.style.opacity = '1';
+            });
+        });
+
+        // ==========================================
+        // GLOBAL SEARCH LOGIC
+        // ==========================================
+        const searchModal = document.getElementById('searchModal');
+        const searchInput = document.getElementById('globalSearchInput');
+        const searchResults = document.getElementById('searchResults');
+        
+        const staticLinks = [
+            { name: 'Home Page', desc: 'Main dashboard and overview', link: 'index.html', icon: '🏠' },
+            { name: 'Society Documents', desc: 'Bye-laws and registration certificates', link: 'society.html', icon: '🏢' },
+            { name: 'Master Records', desc: 'Yearly institutional documentation', link: 'master.html', icon: '📁' },
+            { name: 'CBSE & Zone Compliance', desc: 'Regional affiliation and stats', link: 'cbsezone.html', icon: '🎓' }
+        ];
+
+        // ==========================================
+        // GLOBAL SEARCH UI LOGIC
+        // ==========================================
+        const searchModal = document.getElementById('searchModal');
+        const searchInput = document.getElementById('globalSearchInput');
+        const searchResults = document.getElementById('searchResults');
+        
+        const staticLinks = [
+            { name: 'Home Page', desc: 'Main dashboard', link: 'index.html', icon: '🏠' },
+            { name: 'Society Documents', desc: 'Bye-laws and certificates', link: 'society.html', icon: '🏢' },
+            { name: 'Master Records', desc: 'Yearly institutional docs', link: 'master.html', icon: '📁' },
+            { name: 'CBSE & Zone Info', desc: 'Compliance and affiliation', link: 'cbsezone.html', icon: '🎓' },
+            { name: 'SMC', desc: 'School Management Committee', link: 'members.html?tab=SMC', icon: '🏫' },
+            { name: 'PTA (EC)', desc: 'Parent Teacher Association (EC)', link: 'members.html?tab=PTA', icon: '🤝' },
+            { name: 'SLFRC', desc: 'School Level Fee Reform Committee', link: 'members.html?tab=SLFRC', icon: '⚖️' },
+            { name: 'Staff', desc: 'Faculty and personnel records', link: 'members.html?tab=Staff', icon: '👨‍🏫' }
+        ];
+
+        let dynamicIndex = [];
+        const DOCS_SCRIPT = 'https://script.google.com/macros/s/AKfycbwtrlyjv_RSqQcWgf7_fqrLbItHxyY-Q1dHDplSL9ZLey3Yg5T1lY0o6HQ83FUWnTVBKA/exec';
+        const MEMBERS_SCRIPT = 'https://script.google.com/macros/s/AKfycbxrG4AYLvvsPskxejI6BeTJuFKzTxbPib6u5KS8hBP5CvxawK01ueJ4vFjzPTVCDSJK/exec'; 
+
+        async function buildFullIndex() {
             try {
-                console.log("Attempting to fetch:", `${SITE_CONFIG.scriptURL}?id=${page.sheetId}&gid=${page.gid}`);
+                const requests = [
+                    fetch(`${DOCS_SCRIPT}?page=society`).then(r => r.json()).catch(() => ({})),
+                    fetch(`${DOCS_SCRIPT}?page=master`).then(r => r.json()).catch(() => ({})),
+                    fetch(`${DOCS_SCRIPT}?page=cbsezone`).then(r => r.json()).catch(() => ({})),
+                    fetch(MEMBERS_SCRIPT).then(r => r.json()).catch(() => ({}))
+                ];
+
+                const results = await Promise.all(requests);
+                const [societyRes, masterRes, cbseRes, membersRes] = results;
+
+                let items = [];
                 
-                const response = await fetch(`${SITE_CONFIG.scriptURL}?id=${page.sheetId}&gid=${page.gid}`);
-                
-                // 1. Check if the network request itself failed
-                if (!response.ok) {
-                    throw new Error(`Network Error: ${response.status} ${response.statusText}`);
+                if (societyRes.societies) {
+                    societyRes.societies.forEach(s => s.documents && s.documents.forEach(d => items.push({ name: d.name, desc: `Society Document (${s.name})`, link: d.link, icon: '🏢' })));
+                }
+                if (masterRes.years) {
+                    masterRes.years.forEach(y => y.documents && y.documents.forEach(d => items.push({ name: d.name, desc: `Master Record (${y.year})`, link: d.link, icon: '📁' })));
+                }
+                if (cbseRes.cbse) {
+                    cbseRes.cbse.forEach(d => items.push({ name: d.name, desc: 'CBSE Compliance', link: d.link, icon: '🎓' }));
+                }
+                if (cbseRes.zone) {
+                    cbseRes.zone.forEach(d => items.push({ name: d.name, desc: 'Zonal Info', link: d.link, icon: '📍' }));
+                }
+                // Robust Member Indexing
+                if (membersRes && membersRes.groups && Array.isArray(membersRes.groups)) {
+                    membersRes.groups.forEach(g => {
+                        // Index group name itself
+                        items.push({ name: g.name, desc: 'Membership Section', link: `members.html?tab=${g.name}`, icon: '👥' });
+                        
+                        // Index old-style documents if present
+                        if (g.documents && Array.isArray(g.documents)) {
+                             g.documents.forEach(d => items.push({ name: d.name, desc: `Member Record (${g.name})`, link: d.link, icon: '👥' }));
+                        }
+                        
+                        // Index new-style table rows if present
+                        if (g.rows && Array.isArray(g.rows)) {
+                            g.rows.forEach(row => {
+                                if (row[0]) items.push({ name: `${g.name} - ${row[0]}`, desc: 'Membership Record', link: `members.html?tab=${g.name}`, icon: '📅' });
+                            });
+                        }
+                    });
                 }
 
-                // 2. Get text first to see if it's an HTML error page from Google
-                const text = await response.text();
-                console.log("Raw Response from Google:", text);
-
-                // 3. Try to parse it as JSON
-                let data;
-                try {
-                    data = JSON.parse(text);
-                } catch (e) {
-                    // If this fails, it means Google returned an HTML error page (usually permissions)
-                    throw new Error("Script returned HTML instead of JSON. (Likely a Permission/Login issue). Check Console for details.");
-                }
-
-                // 4. Check if the script sent a logic error
-                if (data.error) {
-                    throw new Error("Script Error: " + data.error);
-                }
-
-                renderUI(page, data.rows, data.lastUpdated);
-
-            } catch (err) {
-                console.error(err);
-                // Print the REAL error to the screen
-                contentDiv.innerHTML = `
-                    <div class="hero-header">
-                        <h2 style="color:red; margin-bottom:10px;">Connection Failed</h2>
-                        <div style="background:#fff1f2; padding:20px; border-radius:8px; border:1px solid #fecaca; color:#991b1b; display:inline-block; text-align:left;">
-                            <strong>Error Details:</strong><br>
-                            ${err.message}
-                            <br><br>
-                            <em>(Open your browser console [F12] for more technical details)</em>
-                        </div>
-                    </div>`;
-            } finally {
-                loader.style.display = 'none';
+                dynamicIndex = items;
+            } catch (e) {
+                console.error("Failed to build search index:", e);
             }
         }
 
-        function renderUI(page, rows, updated) {
-            const headers = Object.keys(rows[0]);
-            let html = `
-                <div class="hero-header">
-                    <span class="badge"><i class="fa-regular fa-clock"></i> Updated: ${updated || 'Live'}</span>
-                    <h1>${page.title}</h1>
-                </div>`;
+        function openSearch() {
+            searchModal.classList.remove('hidden');
+            searchInput.focus();
+            document.body.style.overflow = 'hidden';
+            handleGlobalSearch('');
+        }
 
-            if (page.layout === 'card') {
-                html += `<div class="grid">`;
-                rows.forEach(row => {
-                    html += `<div class="card">`;
-                    headers.forEach(h => { html += `<div class="card-label">${h}</div><div class="card-value">${formatCell(row[h])}</div>`; });
-                    html += `</div>`;
-                });
-                html += `</div>`;
-            } else {
-                html += `<div class="table-wrapper"><div class="table-scroll"><table><thead><tr>${headers.map(h => `<th>${h}</th>`).join('')}</tr></thead><tbody>
-                    ${rows.map(row => `<tr>${headers.map(h => `<td>${formatCell(row[h])}</td>`).join('')}</tr>`).join('')}
-                </tbody></table></div></div>`;
+        function closeSearch() {
+            searchModal.classList.add('hidden');
+            document.body.style.overflow = '';
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if ((e.metaKey || e.ctrlKey) && e.key === 'k') { e.preventDefault(); openSearch(); }
+            if (e.key === 'Escape') closeSearch();
+        });
+
+        function handleGlobalSearch(query) {
+            const term = query.toLowerCase().trim();
+            const combined = [...staticLinks, ...dynamicIndex];
+            const filtered = term ? combined.filter(i => i.name.toLowerCase().includes(term) || (i.desc && i.desc.toLowerCase().includes(term))) : staticLinks.slice(0, 4);
+            renderResults(filtered, term ? "Search Results" : "Quick Links");
+        }
+
+        function renderResults(items, title) {
+            if (items.length === 0) {
+                searchResults.innerHTML = `<div class="text-center py-10 text-gray-400 font-light">No results found.</div>`;
+                return;
             }
-            renderContent(html);
+            searchResults.innerHTML = `<div class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-3 ml-2">${title}</div>` + 
+                items.map(item => `
+                    <a href="${item.link}" class="flex items-center p-4 rounded-2xl hover:bg-gray-50 dark:hover:bg-slate-800 border border-transparent hover:border-gray-100 dark:hover:border-slate-700 transition-all group">
+                        <div class="w-10 h-10 bg-white dark:bg-slate-700 shadow-sm rounded-xl flex items-center justify-center mr-4 group-hover:scale-110 transition-transform"><span class="text-xl">${item.icon || '📄'}</span></div>
+                        <div class="flex-1"><div class="font-medium text-gray-900 dark:text-white">${item.name}</div><div class="text-xs text-gray-400">${item.desc}</div></div>
+                        <svg class="w-5 h-5 text-gray-300 group-hover:text-indigo-600 transform group-hover:translate-x-1 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                    </a>`).join('');
         }
 
-        // ✨ SMART FORMATTING: Detects if link is PDF or Web
-        function formatCell(val) {
-            if (!val) return '<span style="color:#e5e7eb">—</span>';
-            const str = String(val).trim();
-            
-            if (str.startsWith('http')) {
-                // If it looks like a PDF
-                if (str.toLowerCase().includes('pdf') || str.includes('drive.google.com')) {
-                    return `<a href="${str}" target="_blank" class="btn-link"><i class="fa-regular fa-file-pdf"></i> View PDF</a>`;
-                }
-                return `<a href="${str}" target="_blank" class="btn-link"><i class="fa-solid fa-arrow-up-right-from-square"></i> Open Link</a>`;
-            }
-            return str;
-        }
+        buildFullIndex();
 
-        function renderContent(html) {
-            // Fade In Effect
-            appArea.style.opacity = '0';
-            appArea.innerHTML = html;
-            setTimeout(() => {
-                appArea.style.transition = 'opacity 0.4s ease';
-                appArea.style.opacity = '1';
-            }, 50);
+        // Register Service Worker for PWA
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js').catch(err => console.log('SW registration failed:', err));
+            });
         }
-
-        init();
     </script>
 </body>
 </html>
-
-
-
